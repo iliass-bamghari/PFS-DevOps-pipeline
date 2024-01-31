@@ -43,58 +43,58 @@
   ### Add item in Jenkins
   Go to Jenkins -> New item -> Add name -> choose Pipeline -> Discard old builds -> Max # of builds to keep: 2 -> Script:
   
-    pipeline {
-    agent any
-    tools {
-        jdk 'jdk17'
-        nodejs 'node16'
-    }
-    environment {
-        SCANNER_HOME = tool 'sonar-scanner'
-    }
-    stages {
-        stage('clean workspace') {
-            steps {
-                cleanWs()
-            }
-        }
-    stage('Checkout from Git') {
-            steps {
-                git branch: 'main', url: 'https://github.com/iliass-bamghari/PFS.git'
-            }
-        }
-        stage("Sonarqube Analysis") {
-            steps {
-                script {
-                    bat "sonar-scanner.bat -Dsonar.projectKey=PFS-CI -Dsonar.sources=. -Dsonar.host.url=http://192.168.3.164:9000 -Dsonar.login=sqp_bb5ca4e8bdba5d4ffe4657089e36f6b4c354ef69"
-                }
-            }
-        }
-        stage("Quality Gate") {
-            steps {
-                script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'SonarQube-Token'
-                }
-            }
-        }
-        stage('Install Dependencies') {
-            steps {
-                sh "npm install"
-            }
-        }
-         stage("Docker Build & Push"){
-             steps{
-                 script{
-                   withDockerRegistry(credentialsId: 'dockerhub', toolName: 'docker'){   
-                      sh "docker build -t PFS-pipeline ."
-                      sh "docker tag PFS-pipeline iliassbamghari/PFS-pipeline:latest "
-                      sh "docker push iliassbamghari/PFS-pipeline:latest "
-                    }
-                }
-            }
-        }
-    }
-}    
+     pipeline {
+     agent any
+     tools {
+         jdk 'jdk17'
+         nodejs 'node16'
+     }
+     environment {
+         SCANNER_HOME = tool 'sonar-scanner'
+     }
+     stages {
+         stage('clean workspace') {
+             steps {
+                 cleanWs()
+             }
+         }
+     stage('Checkout from Git') {
+             steps {
+                 git branch: 'main', url: 'https://github.com/iliass-bamghari/PFS.git'
+             }
+         }
+         stage("Sonarqube Analysis") {
+             steps {
+                 script {
+                     bat "sonar-scanner.bat -Dsonar.projectKey=PFS-CI -Dsonar.sources=. -Dsonar.host.url=http://192.168.3.164:9000 -Dsonar.login=sqp_bb5ca4e8bdba5d4ffe4657089e36f6b4c354ef69"
+                 }
+             }
+         }
+         stage("Quality Gate") {
+             steps {
+                 script {
+                     waitForQualityGate abortPipeline: false, credentialsId: 'SonarQube-Token'
+                 }
+             }
+         }
+         stage('Install Dependencies') {
+             steps {
+                 sh "npm install"
+             }
+         }
+          stage("Docker Build & Push"){
+              steps{
+                  script{
+                    withDockerRegistry(credentialsId: 'dockerhub', toolName: 'docker'){   
+                       sh "docker build -t PFS-pipeline ."
+                       sh "docker tag PFS-pipeline iliassbamghari/PFS-pipeline:latest "
+                       sh "docker push iliassbamghari/PFS-pipeline:latest "
+                     }
+                 }
+             }
+         }
+     }
+    }    
        
        
 
