@@ -17,14 +17,13 @@
   - sonarqube scanner => Install from Maven Central => keep the default version
 ## Sonarqube 
   ## Sonarqube installation using Docker:
-  'docker run -d --name sonar -p 9000:9000 sonarqube:lts-community'
+    'docker run -d --name sonar -p 9000:9000 sonarqube:lts-community'
   ## Configure SonarQube with Jenkins:
-    ### Add Credentials
-       Sonarqube web UI: Go to:  Administration -> Security -> Users -> Tokens, add a name, then generate a token, then copy it.
-       Jenkins web UI: Go to: Manage Jenkins -> Credentials -> Add Credentials -> Kind:Secret text -> secret:<your-token> -> ID:SonarQube-Token
-    ### Add SonarQube server in Jenkins:
-    
-    Manage Jenkins -> System -> SonarQube installations -> add a name -> Server URL: http://192.168.3.164:9000 -> Server authentication token: Choose your token
+   ### Add Credentials
+   Sonarqube web UI: Go to:  Administration -> Security -> Users -> Tokens, add a name, then generate a token, then copy it.
+   Jenkins web UI: Go to: Manage Jenkins -> Credentials -> Add Credentials -> Kind:Secret text -> secret:<your-token> -> ID:SonarQube-Token
+   ### Add SonarQube server in Jenkins:
+   Manage Jenkins -> System -> SonarQube installations -> add a name -> Server URL: http://192.168.3.164:9000 -> Server authentication token: Choose your token
   ## Create Quality Gates in SonarQube:
   Quality Gates -> create -> Add a name <SonarQube-Quality-Gate>
   ## Add webhook in SonarQube:
