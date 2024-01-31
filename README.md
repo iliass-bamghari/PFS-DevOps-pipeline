@@ -15,9 +15,9 @@
   - JDK => Install from adoptium.net => choose the version
   - docker => Download from docker.com => keep the latest version
   - sonarqube scanner => Install from Maven Central => keep the default version
-## Sonarqube 
+## SonarQube 
   ## Sonarqube installation using Docker:
-    'docker run -d --name sonar -p 9000:9000 sonarqube:lts-community'
+    docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
   ## Configure SonarQube with Jenkins:
    ### Add Credentials
    Sonarqube web UI: Go to:  Administration -> Security -> Users -> Tokens, add a name, then generate a token, then copy it.
