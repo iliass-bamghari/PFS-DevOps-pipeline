@@ -1,7 +1,7 @@
 ﻿# PFS-DevOps-pipeline
  
 ## Architecture Diagram
-![3-Tier Architecture](./PFS DevOps Architecture.png)
+![3-Tier Architecture](./PFS-DevOps-Architecture.png)
 
 ## Jenkins:
   ### Jenkins plugins:
