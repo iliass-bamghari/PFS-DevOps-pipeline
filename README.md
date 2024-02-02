@@ -12,16 +12,16 @@
   - docker => Docker, Docker Commons, Docker Pipeline, Docker API, docker-build-step, CloudBees Docker Build and Publish.
   ### Jenkins tools:
   - nodejs =>
-   - name: node16
-   - version: NodeJS 16.2.0
+     - name: node16
+     - version: NodeJS 16.2.0
   - JDK => Install from adoptium.net => Install from adoptium.net
-   - name: jdk17
-   - version: jdk-17.0.8.1+1
+     - name: jdk17
+     - version: jdk-17.0.8.1+1
   - docker => Download from docker.com => Download from docker.com
-   - name: docker
-   - version: latest
+     - name: docker
+     - version: latest
   - sonarqube scanner => Install from Maven Central => keep the default version
-   - name: sonar-scanner
+     - name: sonar-scanner
 ## SonarQube 
   ## Sonarqube installation using Docker:
     docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
