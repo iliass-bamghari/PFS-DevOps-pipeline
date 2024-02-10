@@ -2,8 +2,11 @@
  
 ## Architecture Diagram
 ![3-Tier Architecture](./PFS-DevOps-Architecture.png)
+## Install Jenkins, SonarQube, Trivy, and Docker
+use the bash file script1.sh to install all the tools using this command:
+           'sudo ./script1.sh'
 
-## Jenkins:
+## Configure Jenkins:
   ### Jenkins plugins:
   - eclipse => Eclipse Temurin installerVersion
   - sonarqube => SonarQube Scanner
