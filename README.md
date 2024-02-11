@@ -58,61 +58,69 @@
   ### Add item in Jenkins
   Go to Jenkins -> New item -> name:PFS-CICD -> choose Pipeline -> Discard old builds -> Max # of builds to keep: 2 -> Script:
   
-          pipeline {
-      agent any
-      tools {
-          jdk 'jdk17'
-          nodejs 'node16'
-      }
-      environment {
-          SCANNER_HOME = tool 'sonar-scanner'
-      }
-      stages {
-          stage('clean workspace') {
-              steps {
-                  cleanWs()
-              }
-          }
-      stage('Checkout from Git') {
-              steps {
-                  git branch: 'main', url: 'https://github.com/iliass-bamghari/youtube-clone.git'
-              }
-          }
-          stage("Sonarqube Analysis") {
-                 steps {
-                     withSonarQubeEnv('SonarQube-Server') {
-                         sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=PFS-CICD \
-                         -Dsonar.projectKey=PFS-CICD'''
-                     }
-                 }
-             }
-          stage("Quality Gate") {
-              steps {
-                  script {
-                      waitForQualityGate abortPipeline: false, credentialsId: 'SonarQube-Token'
-                  }
-              }
-          }
-          stage('Install Dependencies') {
-              steps {
-                  sh "npm install"
-              }
-          }
-           stage("Docker Build & Push"){
-               steps{
-                   script{
-                     withDockerRegistry(credentialsId: 'dockerhub', toolName: 'docker'){   
-                        sh "docker build -t pfspipeline ."
-                        sh "docker tag pfspipeline iliassbamghari/pfspipeline:latest "
-                        sh "docker push iliassbamghari/pfspipeline:latest "
+         pipeline {
+               agent any
+               tools {
+                   jdk 'jdk17'
+                   nodejs 'node16'
+               }
+               environment {
+                   SCANNER_HOME = tool 'sonar-scanner'
+               }
+               stages {
+                   stage('clean workspace') {
+                       steps {
+                           cleanWs()
+                       }
+                   }
+               stage('Checkout from Git') {
+                       steps {
+                           git branch: 'main', url: 'https://github.com/iliass-bamghari/youtube-clone.git'
+                       }
+                   }
+                   stage("Sonarqube Analysis") {
+                          steps {
+                              withSonarQubeEnv('SonarQube-Server') {
+                                  sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=PFS-CICD \
+                                  -Dsonar.projectKey=PFS-CICD'''
+                              }
+                          }
                       }
-                  }
-              }
-          }
-      }
-     }
-          }
-         }    
+                   stage("Quality Gate") {
+                       steps {
+                           script {
+                               waitForQualityGate abortPipeline: false, credentialsId: 'SonarQube-Token'
+                           }
+                       }
+                   }
+                   stage('Install Dependencies') {
+                       steps {
+                           sh "npm install"
+                       }
+                   }
+                   stage('TRIVY FS SCAN') {
+                           steps {
+                               sh "trivy fs . > trivyfs.txt"
+                           }
+                       }
+                    stage("Docker Build & Push"){
+                        steps{
+                            script{
+                              withDockerRegistry(credentialsId: 'dockerhub', toolName: 'docker'){   
+                                 sh "docker build -t pfspipeline ."
+                                 sh "docker tag pfspipeline iliassbamghari/pfspipeline:latest "
+                                 sh "docker push iliassbamghari/pfspipeline:latest "
+                               }
+                           }
+                       }
+                   }
+                   stage("TRIVY Image Scan"){
+                          steps{
+                              sh "trivy image iliassbamghari/pfspipeline:latest > trivyimage.txt" 
+                          }
+                      }
+               }
+              }  
        
        
 
